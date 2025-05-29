@@ -35,6 +35,9 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3",
     "@tailwindcss/postcss": "^4",
+    "@types/estree": "^1.0.7",
+    "@types/json-schema": "^7.0.15",
+    "@types/json5": "^2.2.0",
     "@types/node": "^20.17.52",
     "@types/pg": "^8.15.2",
     "@types/react": "^19.1.6",

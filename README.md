@@ -1,36 +1,110 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# User Management App with Next.js
 
-## Getting Started
+This is a User Management App built with Next.js (App Router) that features CRUD (Create, Read, Update, Delete) operations. The data is migrated to/connected with a PostgreSQL database, utilizing two main tables: Users and Addresses.
 
-First, run the development server:
+## Technologies Used
+
+- Next.js (App Router)
+- TypeScript
+- PostgreSQL
+- Drizzle ORM
+- Zod (for input validation)
+- Shadcn UI
+
+## Database Schema
+
+1.  **Users Table**
+
+    - `id` (primary key)
+    - `firstname` (string)
+    - `lastname` (string)
+    - `birthdate` (date)
+
+2.  **Addresses Table** (One-to-One relationship with User)
+    - `id` (primary key)
+    - `user_id` (foreign key to Users table)
+    - `street` (string)
+    - `city` (string)
+    - `province` (string)
+    - `postal_code` (string)
+
+## Features
+
+### Mandatory Features
+
+1.  **CRUD List User:**
+
+    - Add new users
+    - Edit users
+    - Delete users
+    - Display a list of users (Name, Birth Date, Address)
+
+2.  **Database Migration (ORM Drizzle) Using PostgreSQL**
+
+3.  **One-to-One Relationship between User and Address**
+
+### Additional Features
+
+1.  **TypeScript:** The project is written in TypeScript for type safety and improved developer experience.
+
+2.  **Pagination & Searching on User List:**
+
+    - Pagination: Display limited to 5 items per page.
+    - Searching: Based on the `firstname` field.
+
+3.  **ORM Drizzle:** Implements Drizzle ORM for database migrations.
+
+4.  **Input Validation with Zod:** Ensures that all inputs are validated before being stored in the database.
+
+5.  **UI Using Shadcn:** Utilizes UI components from Shadcn for a modern look and feel.
+
+## Setup Instructions
+
+### Prerequisites
+
+- Node.js installed
+- PostgreSQL database set up
+
+### Environment Variables
+
+Create a `.env` file in the root directory with the following content:
+
+```env
+# Database URL
+DATABASE_URL=postgresql://USER:PASSWORD@localhost:5432/listuser
+
+```
+
+Replace `USER`, `PASSWORD`, and `listuser` with your PostgreSQL credentials and database name.
+
+### Install Dependencies
+
+Run the following command to install the project dependencies:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
+pnpm install
+```
+
+### Database Migration
+
+Run the following command to migrate the database using Drizzle ORM:
+
+```bash
+npx drizzle-kit push
+```
+
+### Development Server
+
+Run the development server with the following command:
+
+```bash
 pnpm dev
-# or
-bun dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Usage
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- To add a new user, click on the "Add User" button.
+- To edit a user, click on the "Edit" button next to the user in actions column.
+- To delete a user, click on the "Delete" button next to the user in actions column.

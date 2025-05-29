@@ -72,6 +72,15 @@ importers:
       '@tailwindcss/postcss':
         specifier: ^4
         version: 4.1.8
+      '@types/estree':
+        specifier: ^1.0.7
+        version: 1.0.7
+      '@types/json-schema':
+        specifier: ^7.0.15
+        version: 7.0.15
+      '@types/json5':
+        specifier: ^2.2.0
+        version: 2.2.0
       '@types/node':
         specifier: ^20.17.52
         version: 20.17.52
@@ -987,6 +996,10 @@ packages:
 
   '@types/json5@0.0.29':
     resolution: {integrity: sha512-dRLjCWHYg4oaA77cxO64oO+7JwCwnIzkZPdrrC71jQmQtlhM556pwKo5bUzqvZndkVbeFLIIi+9TC40JNF5hNQ==}
+
+  '@types/json5@2.2.0':
+    resolution: {integrity: sha512-NrVug5woqbvNZ0WX+Gv4R+L4TGddtmFek2u8RtccAgFZWtS9QXF2xCXY22/M4nzkaKF0q9Fc6M/5rxLDhfwc/A==}
+    deprecated: This is a stub types definition. json5 provides its own type definitions, so you do not need this installed.
 
   '@types/node@20.17.52':
     resolution: {integrity: sha512-2aj++KfxubvW/Lc0YyXE3OEW7Es8TWn1MsRzYgcOGyTNQxi0L8rxQUCZ7ZbyOBWZQD5I63PV9egZWMsapVaklg==}
@@ -3329,6 +3342,10 @@ snapshots:
   '@types/json-schema@7.0.15': {}
 
   '@types/json5@0.0.29': {}
+
+  '@types/json5@2.2.0':
+    dependencies:
+      json5: 1.0.2
 
   '@types/node@20.17.52':
     dependencies:
