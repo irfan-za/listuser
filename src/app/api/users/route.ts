@@ -54,7 +54,7 @@ export async function GET(request: NextRequest) {
         hasPrev: page > 1,
       },
     });
-    // @ts-expect-error
+    // @ts-expect-error ignore unused code
   } catch (error) {
     return NextResponse.json(
       { error: "Failed to fetch users" },
