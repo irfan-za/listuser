@@ -90,7 +90,7 @@ pnpm install
 Run the following command to migrate the database using Drizzle ORM:
 
 ```bash
-npx drizzle-kit push
+pnpm run db:migrate
 ```
 
 ### Development Server
