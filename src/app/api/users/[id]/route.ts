@@ -34,6 +34,7 @@ export async function GET(
     }
 
     return NextResponse.json(result[0]);
+    // ts-ignore
   } catch (error) {
     return NextResponse.json(
       { error: "Failed to fetch user" },
@@ -71,6 +72,7 @@ export async function PUT(
       .where(eq(addresses.user_id, userId));
 
     return NextResponse.json({ message: "User updated successfully" });
+    // ts-ignore
   } catch (error) {
     if (error instanceof Error) {
       return NextResponse.json({ error: error.message }, { status: 400 });
@@ -92,6 +94,7 @@ export async function DELETE(
     await db.delete(users).where(eq(users.id, userId));
 
     return NextResponse.json({ message: "User deleted successfully" });
+    // ts-ignore
   } catch (error) {
     return NextResponse.json(
       { error: "Failed to delete user" },
