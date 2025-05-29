@@ -3,12 +3,12 @@ import { db } from "@/lib/db";
 import { users, addresses } from "@/lib/db/schema";
 import { eq, ilike, desc } from "drizzle-orm";
 
-async function getUsers(page = 1, search = "") {
+async function getUsers(page = 1, firstname = "") {
   const limit = 5;
   const offset = (page - 1) * limit;
 
-  const whereClause = search
-    ? ilike(users.firstname, `%${search}%`)
+  const whereClause = firstname
+    ? ilike(users.firstname, `%${firstname}%`)
     : undefined;
 
   const result = await db
@@ -51,8 +51,16 @@ async function getUsers(page = 1, search = "") {
   };
 }
 
-export default async function HomePage() {
-  const { users, pagination } = await getUsers();
+export default async function HomePage({
+  searchParams,
+}: {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}) {
+  const { page, firstname } = await searchParams;
+  const currentPage = page ? Number(page) : 1;
+  const currentFirstname = typeof firstname === "string" ? firstname : "";
+
+  const { users, pagination } = await getUsers(currentPage, currentFirstname);
 
   return (
     <DashboardClient initialUsers={users} initialPagination={pagination} />

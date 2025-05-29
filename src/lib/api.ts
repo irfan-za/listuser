@@ -4,10 +4,10 @@ import { User } from "./db/schema";
 
 export const api = {
   users: {
-    getUsers: async (page = 1, search = ""): Promise<IUsersResponse> => {
+    getUsers: async (page = 1, firstname = ""): Promise<IUsersResponse> => {
       const params = new URLSearchParams({
         page: page.toString(),
-        ...(search && { search }),
+        ...(firstname && { firstname }),
       });
 
       const response = await fetch(`/api/users?${params}`, {

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import Link from "next/link";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -25,9 +26,20 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-svh`}
       >
-        {children}
+        <main className="flex-1">{children}</main>
+        <footer>
+          <div className="container mx-auto mb-4 text-center">
+            <p className="text-sm text-gray-500">
+              &copy; {new Date().getFullYear()} Developed by{" "}
+              <Link href="https://irfan-za.com" className="underline">
+                irfan
+              </Link>
+              . All rights reserved.
+            </p>
+          </div>
+        </footer>
       </body>
     </html>
   );

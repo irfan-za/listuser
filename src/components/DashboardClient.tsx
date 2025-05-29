@@ -17,6 +17,7 @@ import { UserForm } from "@/components/UserForm";
 import { UserInput } from "@/lib/validations/user";
 import { api } from "@/lib/api";
 import { IPaginationInfo, IUser } from "@/types";
+import { useSearchParams } from "next/navigation";
 
 interface DashboardClientProps {
   initialUsers: IUser[];
@@ -27,19 +28,25 @@ export function DashboardClient({
   initialUsers,
   initialPagination,
 }: DashboardClientProps) {
+  const searchParams = useSearchParams();
+  const params = new URLSearchParams(searchParams);
   const [users, setUsers] = useState<IUser[]>(initialUsers);
   const [loading, setLoading] = useState(false);
-  const [search, setSearch] = useState("");
-  const [currentPage, setCurrentPage] = useState(1);
+  const [firstname, setFirstname] = useState(
+    searchParams.get("firstname") || ""
+  );
+  const [currentPage, setCurrentPage] = useState(
+    Number(searchParams.get("page")) || 1
+  );
   const [pagination, setPagination] =
     useState<IPaginationInfo>(initialPagination);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingUser, setEditingUser] = useState<IUser | null>(null);
 
-  const fetchUsers = async (page = 1, searchTerm = "") => {
+  const fetchUsers = async (page: number, firstname: string) => {
     setLoading(true);
     try {
-      const data = await api.users.getUsers(page, searchTerm);
+      const data = await api.users.getUsers(page, firstname);
       setUsers(data.users);
       setPagination(data.pagination);
     } catch (error) {
@@ -49,14 +56,10 @@ export function DashboardClient({
     }
   };
 
-  useEffect(() => {
-    fetchUsers(currentPage, search);
-  }, [currentPage, search]);
-
   const handleCreateUser = async (data: UserInput) => {
     try {
       await api.users.createUser(data);
-      fetchUsers(currentPage, search);
+      fetchUsers(currentPage, firstname);
       setIsFormOpen(false);
     } catch (error) {
       toast.error("Error creating user");
@@ -68,7 +71,7 @@ export function DashboardClient({
 
     try {
       await api.users.updateUser(editingUser.id, data);
-      fetchUsers(currentPage, search);
+      fetchUsers(currentPage, firstname);
       setEditingUser(null);
     } catch (error) {
       toast.error("Error updating user");
@@ -79,7 +82,7 @@ export function DashboardClient({
     if (confirm("Are you sure you want to delete this user?")) {
       try {
         await api.users.deleteUser(id);
-        fetchUsers(currentPage, search);
+        fetchUsers(currentPage, firstname);
       } catch (error) {
         toast.error("Error deleting user");
       }
@@ -90,8 +93,53 @@ export function DashboardClient({
     return new Date(dateString).toLocaleDateString("id-ID");
   };
 
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setFirstname(value);
+    setCurrentPage(1);
+
+    if (value) {
+      params.set("firstname", value);
+    } else {
+      params.delete("firstname");
+    }
+
+    window.history.replaceState(
+      {},
+      "",
+      params.toString() ? `?${params.toString()}` : window.location.pathname
+    );
+  };
+
+  const handlePrev = () => {
+    setCurrentPage((prev) => Math.max(prev - 1, 1));
+    if (currentPage > 1) {
+      params.set("page", String(currentPage - 1));
+    } else {
+      params.delete("page");
+    }
+    window.history.replaceState(
+      {},
+      "",
+      params.toString() ? `?${params.toString()}` : window.location.pathname
+    );
+  };
+
+  const handleNext = () => {
+    setCurrentPage((prev) => prev + 1);
+    params.set("page", String(currentPage + 1));
+    window.history.replaceState(
+      {},
+      "",
+      params.toString() ? `?${params.toString()}` : window.location.pathname
+    );
+  };
+  useEffect(() => {
+    fetchUsers(currentPage, firstname);
+  }, [currentPage, firstname]);
+
   return (
-    <div className="container mx-auto py-8 px-4">
+    <div className="container mx-auto py-5 px-4">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-3xl font-bold">User Management</h1>
         <Button onClick={() => setIsFormOpen(true)}>
@@ -105,11 +153,8 @@ export function DashboardClient({
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
           <Input
             placeholder="Search by first name..."
-            value={search}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-              setSearch(e.target.value);
-              setCurrentPage(1);
-            }}
+            value={firstname}
+            onChange={handleSearch}
             className="pl-10"
           />
         </div>
@@ -188,7 +233,7 @@ export function DashboardClient({
             <div className="flex space-x-2">
               <Button
                 variant="outline"
-                onClick={() => setCurrentPage(currentPage - 1)}
+                onClick={handlePrev}
                 disabled={!pagination.hasPrev}
               >
                 Previous
@@ -198,7 +243,7 @@ export function DashboardClient({
               </span>
               <Button
                 variant="outline"
-                onClick={() => setCurrentPage(currentPage + 1)}
+                onClick={handleNext}
                 disabled={!pagination.hasNext}
               >
                 Next
