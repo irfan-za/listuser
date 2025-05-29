@@ -49,7 +49,7 @@ export function DashboardClient({
       const data = await api.users.getUsers(page, firstname);
       setUsers(data.users);
       setPagination(data.pagination);
-      // @ts-ignore
+      // @ts-expect-error
     } catch (error) {
       toast.error("Failed to fetch users");
     } finally {
@@ -62,7 +62,7 @@ export function DashboardClient({
       await api.users.createUser(data);
       fetchUsers(currentPage, firstname);
       setIsFormOpen(false);
-      // @ts-ignore
+      // @ts-expect-error
     } catch (error) {
       toast.error("Error creating user");
     }
@@ -75,7 +75,7 @@ export function DashboardClient({
       await api.users.updateUser(editingUser.id, data);
       fetchUsers(currentPage, firstname);
       setEditingUser(null);
-      // @ts-ignore
+      // @ts-expect-error
     } catch (error) {
       toast.error("Error updating user");
     }
@@ -86,7 +86,7 @@ export function DashboardClient({
       try {
         await api.users.deleteUser(id);
         fetchUsers(currentPage, firstname);
-        // @ts-ignore
+        // @ts-expect-error
       } catch (error) {
         toast.error("Error deleting user");
       }

@@ -49,7 +49,7 @@ export function UserForm({
       await onSubmit(data);
       reset();
       onClose();
-      // @ts-ignore
+      // @ts-expect-error
     } catch (error) {
       toast.error("Failed to submit form");
     } finally {
