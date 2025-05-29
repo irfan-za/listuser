@@ -54,7 +54,7 @@ export async function GET(request: NextRequest) {
         hasPrev: page > 1,
       },
     });
-    // ts-ignore
+    // @ts-ignore
   } catch (error) {
     return NextResponse.json(
       { error: "Failed to fetch users" },
@@ -86,7 +86,6 @@ export async function POST(request: NextRequest) {
     });
 
     return NextResponse.json(newUser, { status: 201 });
-    // ts-ignore
   } catch (error) {
     if (error instanceof Error) {
       return NextResponse.json({ error: error.message }, { status: 400 });
