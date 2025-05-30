@@ -2,6 +2,8 @@
 
 This is a User Management App built with Next.js (App Router) that features CRUD (Create, Read, Update, Delete) operations. The data is migrated to/connected with a PostgreSQL database, utilizing two main tables: Users and Addresses.
 
+**Demo Project:** [listuser-taupe.vercel.app](https://listuser-taupe.vercel.app/)
+
 ## Technologies Used
 
 - Next.js (App Router)
