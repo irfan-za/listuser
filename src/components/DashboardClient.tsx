@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Plus, Search, Edit, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -42,6 +42,7 @@ export function DashboardClient({
     useState<IPaginationInfo>(initialPagination);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingUser, setEditingUser] = useState<IUser | null>(null);
+  const searchTimeoutRef = useRef<NodeJS.Timeout>(null);
 
   const fetchUsers = async (page: number, firstname: string) => {
     setLoading(true);
@@ -96,23 +97,28 @@ export function DashboardClient({
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString("id-ID");
   };
-
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setFirstname(value);
-    setCurrentPage(1);
 
-    if (value) {
-      params.set("firstname", value);
-    } else {
-      params.delete("firstname");
+    if (searchTimeoutRef.current) {
+      clearTimeout(searchTimeoutRef.current);
     }
 
-    window.history.replaceState(
-      {},
-      "",
-      params.toString() ? `?${params.toString()}` : window.location.pathname
-    );
+    searchTimeoutRef.current = setTimeout(() => {
+      setCurrentPage(1);
+      fetchUsers(1, value);
+      if (value) {
+        params.set("firstname", value);
+      } else {
+        params.delete("firstname");
+      }
+      window.history.replaceState(
+        {},
+        "",
+        params.toString() ? `?${params.toString()}` : window.location.pathname
+      );
+    }, 400);
   };
 
   const handlePrev = () => {
@@ -140,7 +146,8 @@ export function DashboardClient({
   };
   useEffect(() => {
     fetchUsers(currentPage, firstname);
-  }, [currentPage, firstname]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentPage]);
 
   return (
     <div className="container mx-auto py-5 px-4">

@@ -51,6 +51,7 @@ This is a User Management App built with Next.js (App Router) that features CRUD
 
     - Pagination: Display limited to 5 items per page.
     - Searching: Based on the `firstname` field.
+    - Implements debounce search with delay for better performance and reduced API calls.
 
 3.  **ORM Drizzle:** Implements Drizzle ORM for database migrations.
 

@@ -33,7 +33,11 @@ export default function RootLayout({
           <div className="container mx-auto mb-4 text-center">
             <p className="text-sm text-gray-500">
               &copy; {new Date().getFullYear()} Developed by{" "}
-              <Link href="https://irfan-za.com" className="underline">
+              <Link
+                href="https://irfan-za.com"
+                target="_blank"
+                className="underline"
+              >
                 irfan
               </Link>
               . All rights reserved.
