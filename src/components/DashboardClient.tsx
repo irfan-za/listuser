@@ -18,6 +18,7 @@ import { UserInput } from "@/lib/validations/user";
 import { api } from "@/lib/api";
 import { IPaginationInfo, IUser } from "@/types";
 import { useSearchParams } from "next/navigation";
+import { Skeleton } from "./ui/skeleton";
 
 interface DashboardClientProps {
   initialUsers: IUser[];
@@ -172,7 +173,13 @@ export function DashboardClient({
       </div>
 
       {loading ? (
-        <div className="text-center py-8">Loading...</div>
+        <div className="flex items-center space-y-4 flex-col">
+          <Skeleton className="h-10 w-full bg-border" />
+          <Skeleton className="h-8 w-full bg-border" />
+          <Skeleton className="h-8 w-full bg-border" />
+          <Skeleton className="h-8 w-full bg-border" />
+          <Skeleton className="h-8 w-full bg-border" />
+        </div>
       ) : (
         <>
           <div className="bg-white rounded-lg shadow overflow-hidden">
