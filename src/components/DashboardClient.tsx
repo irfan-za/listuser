@@ -76,6 +76,7 @@ export function DashboardClient({
       await api.users.createUser(data);
       fetchUsers(currentPage, firstname);
       setIsFormOpen(false);
+      toast.success("User created successfully");
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
       toast.error("Error creating user");
@@ -89,6 +90,7 @@ export function DashboardClient({
       await api.users.updateUser(editingUser.id, data);
       fetchUsers(currentPage, firstname);
       setEditingUser(null);
+      toast.success("User updated successfully");
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
       toast.error("Error updating user");
