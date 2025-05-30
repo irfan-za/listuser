@@ -49,7 +49,7 @@ export function UserForm({
       await onSubmit(data);
       reset();
       onClose();
-      // @ts-expect-error ignore unused code
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
       toast.error("Failed to submit form");
     } finally {
