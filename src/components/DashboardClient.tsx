@@ -13,6 +13,16 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { UserForm } from "@/components/UserForm";
 import { UserInput } from "@/lib/validations/user";
 import { api } from "@/lib/api";
@@ -43,6 +53,8 @@ export function DashboardClient({
     useState<IPaginationInfo>(initialPagination);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingUser, setEditingUser] = useState<IUser | null>(null);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [userToDelete, setUserToDelete] = useState<number | null>(null);
   const searchTimeoutRef = useRef<NodeJS.Timeout>(null);
 
   const fetchUsers = async (page: number, firstname: string) => {
@@ -84,15 +96,20 @@ export function DashboardClient({
   };
 
   const handleDeleteUser = async (id: number) => {
-    if (confirm("Are you sure you want to delete this user?")) {
-      try {
-        await api.users.deleteUser(id);
-        fetchUsers(currentPage, firstname);
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      } catch (error) {
-        toast.error("Error deleting user");
-      }
+    try {
+      await api.users.deleteUser(id);
+      fetchUsers(currentPage, firstname);
+      setUserToDelete(null);
+      toast.success("User deleted successfully");
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    } catch (error) {
+      toast.error("Error deleting user");
     }
+  };
+
+  const openDeleteDialog = (id: number) => {
+    setUserToDelete(id);
+    setIsDeleteDialogOpen(true);
   };
 
   const formatDate = (dateString: string) => {
@@ -232,7 +249,7 @@ export function DashboardClient({
                         <Button
                           variant="destructive"
                           size="sm"
-                          onClick={() => handleDeleteUser(user.id)}
+                          onClick={() => openDeleteDialog(user.id)}
                         >
                           <Trash2 className="w-4 h-4" />
                         </Button>
@@ -294,6 +311,31 @@ export function DashboardClient({
           isEditing
         />
       )}
+
+      <AlertDialog
+        open={isDeleteDialogOpen}
+        onOpenChange={setIsDeleteDialogOpen}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This action cannot be undone. This will permanently delete the
+              user and all associated data.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel onClick={() => setUserToDelete(null)}>
+              Cancel
+            </AlertDialogCancel>
+            <AlertDialogAction
+              onClick={() => userToDelete && handleDeleteUser(userToDelete)}
+            >
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }
